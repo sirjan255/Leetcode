@@ -1,0 +1,37 @@
+from collections import Counter
+
+class Solution:
+    def findSubstring(self, s, words):
+        if not s or not words:
+            return []
+        
+        word_length = len(words[0])
+        word_count = len(words)
+        total_length = word_length * word_count
+        words_counter = Counter(words)
+        
+        result_indices = []
+        
+        for i in range(len(s) - total_length + 1):
+            # Get the current substring of length equal to total_length
+            substring = s[i:i + total_length]
+            # Create a counter for the words in the current substring
+            current_counter = Counter()
+            
+            # Count the words in the current substring
+            for j in range(0, total_length, word_length):
+                word = substring[j:j + word_length]
+                current_counter[word] += 1
+            
+            # Check if the current counter matches the words counter
+            if current_counter == words_counter:
+                result_indices.append(i)
+        
+        return result_indices
+
+# Example usage:
+solution = Solution()
+s = "barfoothefoobarman"
+words = ["foo", "bar"]
+result = solution.findSubstring(s, words)
+print(result)  # Output: [0, 9]
