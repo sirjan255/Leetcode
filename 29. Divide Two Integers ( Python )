@@ -1,0 +1,39 @@
+class Solution:
+    def divide(self, dividend, divisor):
+        # Handle edge cases
+        if dividend == 0:
+            return 0
+        if divisor == 0:
+            raise ValueError("Divisor cannot be zero.")
+        
+        # Define constants for the 32-bit signed integer range
+        INT_MAX = 2**31 - 1
+        INT_MIN = -2**31
+        
+        # Determine the sign of the quotient
+        negative = (dividend < 0) != (divisor < 0)
+        
+        # Use absolute values to simplify the division process
+        a, b = abs(dividend), abs(divisor)
+        quotient = 0
+        
+        # Perform the division using bit manipulation
+        for i in range(31, -1, -1):
+            # Check if the shifted divisor can fit into the remaining dividend
+            if (b << i) <= a:
+                a -= (b << i)  # Subtract the shifted divisor from dividend
+                quotient += (1 << i)  # Increment the quotient by the corresponding power of 2
+        
+        # Apply the sign to the quotient
+        if negative:
+            quotient = -quotient
+        
+        # Clamp the quotient to the 32-bit signed integer range
+        return max(min(quotient, INT_MAX), INT_MIN)
+
+# Example usage:
+solution = Solution()
+dividend = 10
+divisor = 3
+result = solution.divide(dividend, divisor)
+print(result)  # Expected output: 3
