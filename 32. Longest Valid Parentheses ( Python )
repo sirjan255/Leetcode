@@ -1,0 +1,22 @@
+class Solution:
+    def longestValidParentheses(self, s):
+        stack = []
+        max_length = 0
+        last_invalid = -1  # Base index for valid substrings
+        
+        for i, char in enumerate(s):
+            if char == '(':
+                stack.append(i)  # Push the index of '(' onto the stack
+            else:
+                if stack:
+                    stack.pop()  # Pop the last unmatched '('
+                    if stack:
+                        # The length of the valid substring is from the last unmatched '('
+                        max_length = max(max_length, i - stack[-1])
+                    else:
+                        # If the stack is empty, set the last_invalid to the current index
+                        max_length = max(max_length, i - last_invalid)
+                else:
+                    last_invalid = i  # Update the last invalid index
+        
+        return max_length
